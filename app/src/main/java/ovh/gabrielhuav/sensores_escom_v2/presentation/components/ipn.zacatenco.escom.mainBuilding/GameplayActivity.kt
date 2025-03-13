@@ -237,6 +237,7 @@ class GameplayActivity : AppCompatActivity(),
                 if (canChangeMap) {
                     when (targetDestination) {
                         "edificio2" -> startBuildingActivity()
+                        "metro" -> startMetroActivity()
                         "cafeteria" -> startCafeteriaActivity()
                         else -> showToast("No hay interacción disponible en esta posición")
                     }
@@ -259,6 +260,21 @@ class GameplayActivity : AppCompatActivity(),
         startActivity(intent)
         finish()
     }
+
+    private fun startMetroActivity() {
+        val intent = Intent(this, Metro::class.java).apply {
+            putExtra("PLAYER_NAME", playerName)
+            putExtra("IS_SERVER", gameState.isServer)
+            putExtra("INITIAL_POSITION", Pair(1, 1))
+            putExtra("PREVIOUS_POSITION", gameState.playerPosition) // Guarda la posición actual
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+        startActivity(intent)
+        finish()
+    }
+
+
+
 
     private fun startBuildingActivity() {
         val intent = Intent(this, BuildingNumber2::class.java).apply {
@@ -283,6 +299,13 @@ class GameplayActivity : AppCompatActivity(),
                 targetDestination = "edificio2"
                 runOnUiThread {
                     Toast.makeText(this, "Presiona A para entrar al edificio 2", Toast.LENGTH_SHORT).show()
+                }
+            }
+            position.first == 38 && position.second == 1 -> {
+                canChangeMap = true
+                targetDestination = "metro"
+                runOnUiThread {
+                    Toast.makeText(this, "Presiona A para entrar al metro", Toast.LENGTH_SHORT).show()
                 }
             }
             position.first == 33 && position.second == 34 -> {

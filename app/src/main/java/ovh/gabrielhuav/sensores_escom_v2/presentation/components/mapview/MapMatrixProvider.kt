@@ -27,7 +27,8 @@ class MapMatrixProvider {
         const val MAP_SALON2009 = "escom_salon2009"
         const val MAP_SALON2010 = "escom_salon2010"
         const val MAP_CAFETERIA = "escom_cafeteria"
-
+        const val MAP_METRO = "escom_metro"
+        const val MAP_CASA = "escom_casa"
 
         // Puntos de transición entre mapas
         val MAIN_TO_BUILDING2_POSITION = Pair(15, 10)
@@ -44,6 +45,15 @@ class MapMatrixProvider {
         val CAFETERIA_TO_MAIN_POSITION = Pair(1, 1)         // Vuelta al mapa principal
 
 
+        val MAIN_TO_METRO_POSITION = Pair(21, 10)       // Desde mapa principal
+        val METRO_TO_MAIN_POSITION = Pair(5, 5)         // Vuelta al mapa principal
+        val METRO_TO_CASA_POSITION = Pair(6, 7)    // CASA
+        val CASA_TO_METRO_POSITION = Pair(7, 8)    // Vuelta al METRO
+
+
+
+
+
         /**
          * Obtiene la matriz para el mapa especificado
          */
@@ -54,6 +64,8 @@ class MapMatrixProvider {
                 MAP_SALON2009 -> createSalon2009Matrix()  // Nueva matriz para el salón 2009
                 MAP_SALON2010 -> createSalon2010Matrix()  // Nueva matriz para el salón 2010
                 MAP_CAFETERIA -> createCafeESCOMMatrix()
+                MAP_METRO -> createMetroMatrix()
+                MAP_CASA -> createCasaMatrix()
                 else -> createDefaultMatrix() // Por defecto, un mapa básico
             }
         }
@@ -469,6 +481,41 @@ class MapMatrixProvider {
             return matrix
         }
 
+
+        private fun createMetroMatrix(): Array<Array<Int>> {
+            val matrix = Array(MAP_HEIGHT) { Array(MAP_WIDTH) { PATH } }
+
+            // Borde simple
+            for (i in 0 until MAP_HEIGHT) {
+                for (j in 0 until MAP_WIDTH) {
+                    if (i == 0 || i == MAP_HEIGHT - 1 || j == 0 || j == MAP_WIDTH - 1) {
+                        matrix[i][j] = WALL
+                    }
+                }
+            }
+
+            return matrix
+        }
+
+        private fun createCasaMatrix(): Array<Array<Int>> {
+            val matrix = Array(MAP_HEIGHT) { Array(MAP_WIDTH) { PATH } }
+
+            // Borde simple
+            for (i in 0 until MAP_HEIGHT) {
+                for (j in 0 until MAP_WIDTH) {
+                    if (i == 0 || i == MAP_HEIGHT - 1 || j == 0 || j == MAP_WIDTH - 1) {
+                        matrix[i][j] = WALL
+                    }
+                }
+            }
+
+            return matrix
+        }
+
+
+
+
+
         /**
          * Matriz predeterminada para cualquier otro mapa
          */
@@ -531,8 +578,16 @@ class MapMatrixProvider {
                 }
             }
 
+            if (mapId == MAP_MAIN && x == 33 && y == 1) {
+                return MAP_METRO
+            }
+
             if (mapId == MAP_MAIN && x == 33 && y == 34) {
                 return MAP_CAFETERIA
+            }
+
+            if (mapId == MAP_METRO && x == 30 && y == 14) {
+                return MAP_CASA
             }
             // Resto de transiciones...
 
@@ -550,7 +605,8 @@ class MapMatrixProvider {
                 MAP_SALON2009 -> Pair(20, 20)  // Posición central dentro del salón 2009
                 MAP_SALON2010 -> Pair(20, 20)  // Posición central dentro del salón 2010
                 MAP_CAFETERIA -> Pair(2, 2)  // Posición central dentro de la escomCAFE
-
+                MAP_METRO -> Pair(20, 20)  // Posición central dentro del metro
+                MAP_CASA -> Pair(15, 15)  // Posición central en la casa
                 else -> Pair(MAP_WIDTH / 2, MAP_HEIGHT / 2)
             }
         }

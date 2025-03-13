@@ -51,6 +51,12 @@
         <activity
             android:name=".presentation.components.BuildingNumber2"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity
+            android:name=".presentation.components.Metro"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity
+            android:name=".presentation.components.Casa"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
 
 
         <activity
